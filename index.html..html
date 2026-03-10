@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batna Trader's ELITE - التطبيق الخارق</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            text-align: center;
+            padding: 16px;
+            min-height: 100vh;
+        }
+        
+        .logo {
+            margin-bottom: 10px;
+        }
+        
+        .logo h1 {
+            color: #f59e0b;
+            font-size: 1.8em;
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+        }
+        
+        .logo .subtitle {
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-title {
+            color: #f59e0b;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+            text-align: right;
+            border-right: 4px solid #f59e0b;
+            padding-right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 14px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-coin {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+        
+        .btn-interval {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn.selected {
+            border: 3px solid #f59e0b;
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+        }
+        
+        .info-panel {
+            background: linear-gradient(135deg, #2d3748 0%, #1e293b 100%);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 10px 0;
+            border: 1px solid #f59e0b33;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .info-label {
+            color: #94a3b8;
+        }
+        
+        .info-value {
+            color: #f59e0b;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .btn-analyze {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            font-size: 1.2em;
+            padding: 18px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+        
+        .btn-analyze:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+        }
+        
+        .btn-analyze:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status-badge {
+            background: #f59e0b;
+            color: #0f172a;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 0.8em;
+        }
+        
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .loading.active {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f59e0b33;
+            border-top: 5px solid #f59e0b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin: 10px 0;
+            font-size: 0.8em;
+            color: #94a3b8;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <h2 style="color: #f59e0b;">جاري التحليل الخارق...</h2>
+        <p style="color: #94a3b8;">15 مؤشر فني | 3 فريمات | دقة 90%</p>
+    </div>
+
+    <div class="logo">
+        <h1>🚀 ABDE BATNA TRADER'S ELITE</h1>
+        <div class="subtitle">النسخة الخارقة - تحليل احترافي بـ 15 مؤشر</div>
+    </div>
+
+    <div class="features">
+        <div class="feature-item">📊 15 مؤشر</div>
+        <div class="feature-item">🎯 دقة 90%</div>
+        <div class="feature-item">🐋 كشف الحيتان</div>
+    </div>
+
+    <div class="container">
+        <!-- قسم العملات -->
+        <div class="section">
+            <div class="section-title">
+                <span>₿</span> اختر العملة
+            </div>
+            <div class="grid-buttons">
+                <button class="btn btn-coin selected" onclick="selectCoin('BTC')" id="coin-BTC">
+                    ₿ BTC (بيتكوين)
+                </button>
+                <button class="btn btn-coin" onclick="selectCoin('ETH')" id="coin-ETH">
+                    Ξ ETH (إيثريوم)
+                </button>
+                <button class="btn btn-coin" onclick="selectCoin('BNB')" id="coin-BNB">
+                    🟡 BNB (بينانس)
+                </button>
+                <button class="btn btn-coin" onclick="selectCoin('SOL')" id="coin-SOL">
+                    ◎ SOL (سولانا)
+                </button>
+                <button class="btn btn-coin" onclick="selectCoin('XRP')" id="coin-XRP">
+                    ✖ XRP (ريبل)
+                </button>
+                <button class="btn btn-coin" onclick="selectCoin('ADA')" id="coin-ADA">
+                    🔷 ADA (كاردانو)
+                </button>
+            </div>
+        </div>
+
+        <!-- قسم الفريمات -->
+        <div class="section">
+            <div class="section-title">
+                <span>⏱️</span> الفريم الزمني
+            </div>
+            <div class="grid-buttons">
+                <button class="btn btn-interval" onclick="selectInterval('15m')" id="interval-15m">
+                    15 دقيقة
+                </button>
+                <button class="btn btn-interval" onclick="selectInterval('1h')" id="interval-1h">
+                    ساعة (1H)
+                </button>
+                <button class="btn btn-interval selected" onclick="selectInterval('4h')" id="interval-4h">
+                    4 ساعات (4H)
+                </button>
+                <button class="btn btn-interval" onclick="selectInterval('1d')" id="interval-1d">
+                    يومي (1D)
+                </button>
+            </div>
+        </div>
+
+        <!-- لوحة المعلومات -->
+        <div class="info-panel">
+            <div class="info-row">
+                <span class="info-label">💰 العملة المختارة:</span>
+                <span class="info-value" id="selected-coin">BTCUSDT</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">⏱️ الفريم:</span>
+                <span class="info-value" id="selected-interval">4H</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">📊 المؤشرات:</span>
+                <span class="info-value">15 مؤشر خارق</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">⚡ الوضع:</span>
+                <span class="info-value">ELITE MODE</span>
+            </div>
+        </div>
+
+        <!-- زر التحليل -->
+        <button class="btn-analyze" onclick="analyze()" id="analyze-btn">
+            🔮 تحليل خارق
+        </button>
+
+        <!-- معلومات إضافية -->
+        <div style="text-align: center; font-size: 0.8em; color: #64748b;">
+            <span class="status-badge">ELITE</span> تحليل بـ 15 مؤشر + كشف الحيتان
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>ELITE TRADER v3.0 - باتنة ترادرز © 2026</p>
+        <p style="margin-top: 5px;">دقة التحليل تصل إلى 90% على الفريمات الكبيرة</p>
+    </div>
+
+    <script>
+        // تهيئة Telegram Web App
+        const telegram = window.Telegram.WebApp;
+        telegram.expand();
+        telegram.ready();
+
+        // المتغيرات العامة
+        let selectedCoin = 'BTC';
+        let selectedInterval = '4h';
+
+        // دالة اختيار العملة
+        function selectCoin(coin) {
+            selectedCoin = coin;
+            
+            // تحديث المظهر
+            document.querySelectorAll('.btn-coin').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById(`coin-${coin}`).classList.add('selected');
+            
+            // تحديث العرض
+            document.getElementById('selected-coin').textContent = coin + 'USDT';
+            
+            // اهتزاز خفيف للتأكيد
+            if (telegram.HapticFeedback) {
+                telegram.HapticFeedback.impactOccurred('light');
+            }
+        }
+
+        // دالة اختيار الفريم
+        function selectInterval(interval) {
+            selectedInterval = interval;
+            
+            // تحديث المظهر
+            document.querySelectorAll('.btn-interval').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById(`interval-${interval}`).classList.add('selected');
+            
+            // تحديث العرض
+            const intervalNames = {
+                '15m': '15 دقيقة',
+                '1h': '1H',
+                '4h': '4H',
+                '1d': '1D'
+            };
+            document.getElementById('selected-interval').textContent = intervalNames[interval];
+            
+            // اهتزاز خفيف للتأكيد
+            if (telegram.HapticFeedback) {
+                telegram.HapticFeedback.impactOccurred('light');
+            }
+        }
+
+        // دالة التحليل الرئيسية
+        function analyze() {
+            // تفعيل شاشة التحميل
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('analyze-btn').disabled = true;
+            
+            // اهتزاز للتأكيد
+            if (telegram.HapticFeedback) {
+                telegram.HapticFeedback.impactOccurred('medium');
+            }
+
+            // تحضير البيانات
+            const data = {
+                coin: selectedCoin + 'USDT',
+                interval: selectedInterval,
+                timestamp: new Date().toISOString(),
+                eliteMode: true
+            };
+
+            // محاكاة طلب التحليل (في التطبيق الحقيقي، هذا يرسل للبوت)
+            setTimeout(() => {
+                // إرسال البيانات للبوت
+                telegram.sendData(JSON.stringify(data));
+                
+                // إخفاء شاشة التحميل
+                document.getElementById('loading').classList.remove('active');
+                
+                // إظهار رسالة نجاح
+                telegram.showAlert('✅ تم إرسال الطلب بنجاح!\nسيصلك التحليل الخارق خلال لحظات...');
+                
+                // إغلاق التطبيق بعد ثانية
+                setTimeout(() => {
+                    telegram.close();
+                }, 1000);
+                
+            }, 2000); // تأخير 2 ثانية للتحميل
+        }
+
+        // منع النقر المزدوج على الزر
+        document.getElementById('analyze-btn').addEventListener('dblclick', (e) => {
+            e.preventDefault();
+        });
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            // تعيين القيم الافتراضية
+            selectCoin('BTC');
+            selectInterval('4h');
+            
+            // إظهار ترحيب
+            console.log('ELITE TRADER جاهز للتحليل الخارق!');
+        });
+    </script>
+</body>
+</html>
