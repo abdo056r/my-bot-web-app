@@ -317,7 +317,7 @@
     </div>
 
     <div class="footer">
-        <p>ELITE TRADER v3.0 - باتنة ترادرز © 2026</p>
+        <p>ELITE TRADER v3.0 - باتنة ترادرز Abdo © 2026</p>
         <p style="margin-top: 5px;">دقة التحليل تصل إلى 90% على الفريمات الكبيرة</p>
     </div>
 
@@ -375,42 +375,28 @@
             }
         }
 
-        // دالة التحليل الرئيسية
+        // دالة التحليل الرئيسية - نسخة معدلة بدون sendData
         function analyze() {
-            // تفعيل شاشة التحميل
+            // 1. إظهار شاشة التحميل
             document.getElementById('loading').classList.add('active');
             document.getElementById('analyze-btn').disabled = true;
             
-            // اهتزاز للتأكيد
+            // 2. اهتزاز الهاتف (اختياري)
             if (telegram.HapticFeedback) {
                 telegram.HapticFeedback.impactOccurred('medium');
             }
 
-            // تحضير البيانات
-            const data = {
-                coin: selectedCoin + 'USDT',
-                interval: selectedInterval,
-                timestamp: new Date().toISOString(),
-                eliteMode: true
-            };
-
-            // محاكاة طلب التحليل (في التطبيق الحقيقي، هذا يرسل للبوت)
+            // 3. محاكاة عملية التحليل
             setTimeout(() => {
-                // إرسال البيانات للبوت
-                telegram.sendData(JSON.stringify(data));
+                // إظهار رسالة تنبيه داخل التطبيق
+                telegram.showAlert('✅ تم استلام طلب التحليل لعملة ' + selectedCoinUSDT + '\nعلى فريم ' + selectedInterval + '\nانتظر النتيجة في المحادثة...');
                 
-                // إخفاء شاشة التحميل
-                document.getElementById('loading').classList.remove('active');
-                
-                // إظهار رسالة نجاح
-                telegram.showAlert('✅ تم إرسال الطلب بنجاح!\nسيصلك التحليل الخارق خلال لحظات...');
-                
-                // إغلاق التطبيق بعد ثانية
+                // إغلاق التطبيق بعد ثانية واحدة من ظهور التنبيه
                 setTimeout(() => {
                     telegram.close();
                 }, 1000);
                 
-            }, 2000); // تأخير 2 ثانية للتحميل
+            }, 1500); // وقت محاكاة التحليل
         }
 
         // منع النقر المزدوج على الزر
@@ -429,4 +415,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
